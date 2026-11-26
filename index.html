@@ -35,12 +35,14 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19,
   attribution: '&copy; OpenStreetMap contributors | Data: data.honolulu.gov' }).addTo(map);
 const layer = L.layerGroup().addTo(map);
 const $status = document.getElementById('status');
+let hidden = new Set(); // incident types unticked in the legend, remembered across reloads
+try { hidden = new Set(JSON.parse(localStorage.getItem('hidden') || '[]')); } catch {}
 const $legend = document.getElementById('legend');
 $legend.innerHTML = Object.entries(COLORS).map(([t, c]) =>
-  `<label class="key"><input type="checkbox" value="${t}" checked><span class="dot" style="background:${c}"></span>${t}</label>`).join('');
-const hidden = new Set(); // incident types unticked in the legend
+  `<label class="key"><input type="checkbox" value="${t}"${hidden.has(t) ? '' : ' checked'}><span class="dot" style="background:${c}"></span>${t}</label>`).join('');
 $legend.addEventListener('change', e => {
   e.target.checked ? hidden.delete(e.target.value) : hidden.add(e.target.value);
+  try { localStorage.setItem('hidden', JSON.stringify([...hidden])); } catch {}
   layer.clearLayers(); groups = {};
   placed.forEach(([r, g]) => addMarker(r, g));
 });
