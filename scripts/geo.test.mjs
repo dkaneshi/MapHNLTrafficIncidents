@@ -18,11 +18,16 @@ test('geocode searches near the area and flags road-only matches', async () => {
     const q = new URL(url).searchParams;
     calls.push([q.get('q'), q.get('viewbox')]);
     const hit = { Kahuku: { lat: 21.68, lon: -157.95, class: 'place' },
-                  '57-419 Kamehameha Hwy': { lat: 21.69, lon: -157.96, class: 'highway' } }[q.get('q')];
+                  '57-419 Kamehameha Hwy': { lat: 21.69, lon: -157.96, class: 'highway' },
+                  'Far Rd': { lat: 21.55, lon: -157.95, class: 'highway' } }[q.get('q')];
     return { ok: true, json: async () => (hit ? [hit] : []) };
   };
   assert.deepEqual(await geocode({ address: '570419 Kam Hwy', area: 'Kahuku' }),
                    { ll: [21.69, -157.96], approx: true });
   assert.equal(calls[1][1], '-158.03,21.76,-157.87,21.6'); // ±0.08° around Kahuku, not all of Oahu
   assert.deepEqual(await geocode({ address: 'Nowhere St', area: 'Kahuku' }), { ll: [21.68, -157.95], approx: true });
+  // a road match far from the area's center falls back to the center, without a second search for the same road
+  const before = calls.length;
+  assert.deepEqual(await geocode({ address: 'Far Rd', area: 'Kahuku' }), { ll: [21.68, -157.95], approx: true });
+  assert.equal(calls.length - before, 1);
 });

@@ -41,7 +41,10 @@ export async function geocode(r, headers) {
   const street = full.split('/')[0].replace(/^[\d-]+\s+/, '').trim(); // first street of an intersection, no number
   for (const q of new Set([full, street].filter(Boolean))) {
     const hit = await search(q, box, headers);
-    if (hit) return { ll: hit.ll, approx: hit.road || q !== full }; // a whole-road match only says "somewhere on this road"
+    if (!hit) continue;
+    // A road match is placed mid-segment, which can lie well outside the area; then the area's center is closer.
+    if (hit.road && c && Math.hypot(hit.ll[0] - c[0], hit.ll[1] - c[1]) > NEAR) break;
+    return { ll: hit.ll, approx: hit.road || q !== full }; // a whole-road match only says "somewhere on this road"
   }
   return c && { ll: c, approx: true };
 }
