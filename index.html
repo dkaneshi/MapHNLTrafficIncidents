@@ -34,6 +34,9 @@ import { FEED, keyOf, geocode as lookup } from './geo.js';
 const REFRESH_MS = 5 * 60 * 1000; // feed updates about every 5 minutes
 const COLORS = { 'MVC': '#d62728', 'MVC Veh Towed': '#8c1d1d', 'Traffic Incident': '#ff7f0e', 'Hazardous Driver': '#9467bd',
                  'Stalled/Hazard Veh': '#e7ba00', 'Traffic Control Device': '#1f77b4', 'Traffic Complaint': '#2ca02c' };
+const EXTRA = ['#17becf', '#e377c2', '#8c564b', '#bcbd22', '#393b79', '#7f7f7f']; // for types the feed adds later
+let extraUsed = 0;
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
 
 const map = L.map('map').setView([21.46, -157.98], 11);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19,
@@ -43,10 +46,14 @@ const $status = document.getElementById('status');
 let hidden = new Set(); // incident types unticked in the legend, remembered across reloads
 try { hidden = new Set(JSON.parse(localStorage.getItem('hidden') || '[]')); } catch {}
 const $legend = document.getElementById('legend');
-$legend.innerHTML = Object.entries(COLORS).map(([t, c]) =>
-  `<label class="key"><input type="checkbox" value="${t}"${hidden.has(t) ? '' : ' checked'}><span class="dot" style="background:${c}"></span>${t}<span class="n"></span></label>`).join('');
+function renderLegend() {
+  $legend.innerHTML = Object.entries(COLORS).map(([t, c]) =>
+    `<label class="key"><input type="checkbox" value="${esc(t)}"${hidden.has(t) ? '' : ' checked'}><span class="dot" style="background:${c}"></span>${esc(t)}<span class="n"></span></label>`).join('');
+}
+renderLegend();
 function applyFilter() {
-  hidden = new Set([...$legend.querySelectorAll('input:not(:checked)')].map(i => i.value));
+  // per-type update keeps saved choices for types not in this session's legend yet
+  $legend.querySelectorAll('input').forEach(i => i.checked ? hidden.delete(i.value) : hidden.add(i.value));
   try { localStorage.setItem('hidden', JSON.stringify([...hidden])); } catch {}
   layer.clearLayers(); groups = {};
   placed.forEach(([r, g]) => addMarker(r, g));
@@ -69,7 +76,6 @@ async function geocode(r) {
   return cache[key];
 }
 
-const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
 const describe = r => `<b>${esc(r.type)}</b><br>${esc(r.date)} ${esc(r.time)}<br>${esc(r.address)}` +
   (r.location ? `<br>${esc(r.location)}` : '') + `<br>${esc(r.area)}`;
 let groups = {}; // "lat,lon" -> { marker, rows }: incidents at the same spot share one marker
@@ -101,6 +107,9 @@ async function refresh() {
   } catch (e) { $status.textContent = `Feed error: ${e.message}. Retrying in 5 min.`; return; }
   // Precomputed by the scheduled GitHub Action; the page only geocodes addresses newer than that file.
   try { Object.assign(cache, await (await fetch('geocodes.json', { cache: 'no-cache' })).json()); } catch {}
+  const fresh = [...new Set(rows.map(r => r.type).filter(t => t && !(t in COLORS)))];
+  fresh.forEach(t => COLORS[t] = EXTRA[extraUsed++ % EXTRA.length]);
+  if (fresh.length) renderLegend();
   for (const i of $legend.querySelectorAll('input'))
     i.parentElement.querySelector('.n').textContent = rows.filter(r => r.type === i.value).length;
   layer.clearLayers(); groups = {}; placed = [];
