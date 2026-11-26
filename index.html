@@ -13,7 +13,8 @@
            border-radius: 6px; box-shadow: 0 1px 4px #0004; max-width: 260px; }
   #panel h1 { font-size: 15px; margin: 0 0 4px; }
   #status { color: #444; margin-bottom: 6px; }
-  .key { display: flex; align-items: center; gap: 6px; }
+  .key { display: flex; align-items: center; gap: 6px; cursor: pointer; }
+  .key input { margin: 0; }
   .cluster { width: 26px; height: 26px; border-radius: 50%; background: #333; color: #fff; font-weight: 600;
              display: flex; align-items: center; justify-content: center; border: 2px solid #fff; box-shadow: 0 0 3px #000; }
   .cluster.approx { opacity: .6; border-style: dashed; }
@@ -34,8 +35,15 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19,
   attribution: '&copy; OpenStreetMap contributors | Data: data.honolulu.gov' }).addTo(map);
 const layer = L.layerGroup().addTo(map);
 const $status = document.getElementById('status');
-document.getElementById('legend').innerHTML = Object.entries(COLORS).map(([t, c]) =>
-  `<div class="key"><span class="dot" style="background:${c}"></span>${t}</div>`).join('');
+const $legend = document.getElementById('legend');
+$legend.innerHTML = Object.entries(COLORS).map(([t, c]) =>
+  `<label class="key"><input type="checkbox" value="${t}" checked><span class="dot" style="background:${c}"></span>${t}</label>`).join('');
+const hidden = new Set(); // incident types unticked in the legend
+$legend.addEventListener('change', e => {
+  e.target.checked ? hidden.delete(e.target.value) : hidden.add(e.target.value);
+  layer.clearLayers(); groups = {};
+  placed.forEach(([r, g]) => addMarker(r, g));
+});
 
 // Geocode cache: Nominatim's usage policy requires caching; localStorage just makes reloads fast.
 let cache = {};
@@ -53,7 +61,9 @@ const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '
 const describe = r => `<b>${esc(r.type)}</b><br>${esc(r.date)} ${esc(r.time)}<br>${esc(r.address)}` +
   (r.location ? `<br>${esc(r.location)}` : '') + `<br>${esc(r.area)}`;
 let groups = {}; // "lat,lon" -> { marker, rows }: incidents at the same spot share one marker
+let placed = []; // [incident, location] pairs from the latest refresh, redrawn when the filter changes
 function addMarker(r, g) {
+  if (hidden.has(r.type)) return;
   const key = g.ll.join(), grp = groups[key] ??= { rows: [] };
   grp.rows.push(r);
   grp.marker?.remove();
@@ -79,7 +89,7 @@ async function refresh() {
   } catch (e) { $status.textContent = `Feed error: ${e.message}. Retrying in 5 min.`; return; }
   // Precomputed by the scheduled GitHub Action; the page only geocodes addresses newer than that file.
   try { Object.assign(cache, await (await fetch('geocodes.json', { cache: 'no-cache' })).json()); } catch {}
-  layer.clearLayers(); groups = {};
+  layer.clearLayers(); groups = {}; placed = [];
   const stamp = new Date().toLocaleTimeString();
   let mapped = 0, missed = 0, done = 0;
   const show = () => $status.textContent = `Updated ${stamp} · ${rows.length} incidents · ${mapped} mapped` +
@@ -90,7 +100,7 @@ async function refresh() {
     let g = null;
     try { g = await geocode(r); } catch (e) { console.warn(e); } // transient geocoder error: not cached, retried next refresh
     if (id !== run) return;
-    g ? (addMarker(r, g), mapped++) : missed++;
+    g ? (placed.push([r, g]), addMarker(r, g), mapped++) : missed++;
     done++; show();
   }
 }
