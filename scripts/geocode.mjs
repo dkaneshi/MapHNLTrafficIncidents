@@ -1,7 +1,7 @@
 // Geocodes the current feed into geocodes.json so browsers don't each hit Nominatim.
 // Keeps only entries for addresses in the current feed; writes the file only when it changes.
 import { readFile, writeFile } from 'node:fs/promises';
-import { FEED, keyOf, geocode } from '../geo.js';
+import { FEED, keyOf, geocode, areas } from '../geo.js';
 
 const OUT = new URL('../geocodes.json', import.meta.url);
 const UA = { 'User-Agent': 'MapHNLTrafficIncidents (https://github.com/dkaneshi/MapHNLTrafficIncidents)' };
@@ -25,3 +25,4 @@ const sorted = Object.fromEntries(Object.entries(next).sort(([a], [b]) => a.loca
 const text = JSON.stringify(sorted, null, 1) + '\n';
 if (text !== JSON.stringify(old, null, 1) + '\n') await writeFile(OUT, text);
 console.log(`${rows.length} rows, ${Object.keys(next).length} locations, ${looked} looked up, ${failed} failed`);
+for (const [a, c] of areas) console.log('area', a, JSON.stringify(c)); // areas looked up this run

@@ -39,8 +39,8 @@ document.getElementById('legend').innerHTML = Object.entries(COLORS).map(([t, c]
 
 // Geocode cache: Nominatim's usage policy requires caching; localStorage just makes reloads fast.
 let cache = {};
-try { cache = JSON.parse(localStorage.getItem('geo') || '{}'); } catch {}
-const saveCache = () => { try { localStorage.setItem('geo', JSON.stringify(cache)); } catch {} };
+try { localStorage.removeItem('geo'); cache = JSON.parse(localStorage.getItem('geo2') || '{}'); } catch {} // 'geo' held pre-area-fix results
+const saveCache = () => { try { localStorage.setItem('geo2', JSON.stringify(cache)); } catch {} };
 
 async function geocode(r) {
   const key = keyOf(r);

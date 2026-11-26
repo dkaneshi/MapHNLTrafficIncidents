@@ -21,7 +21,9 @@ Then open http://localhost:8765.
 - **Data:** fetched straight from the dataset's public API (`https://data.honolulu.gov/resource/ykb6-n5th.json`).
 - **Locations:** the dataset has addresses but no coordinates, so each address is looked up with [OpenStreetMap Nominatim](https://nominatim.org/), limited to Oahu and to one request per second, as the service's usage policy requires.
   - Hawaii house numbers are rewritten before lookup (`590560 Pupukea Rd` → `59-560 Pupukea Rd`), and `Kam Hwy` becomes `Kamehameha Hwy`.
-  - If the full address isn't found, the app tries the street alone, then the area name. Those pins are faded with a dashed outline and marked "Approximate location" in their popup.
+  - The incident's area (e.g. `Kahuku`) is located first, and the address is searched only within about 9 km of it. OpenStreetMap lacks most house numbers, so without this an address like `57-419 Kamehameha Hwy` would land on the same highway in a different town.
+  - If the full address isn't found, the app tries the street alone, then falls back to the area's center. These pins, and any match that is a whole road rather than an address point, are faded with a dashed outline and marked "Approximate location" in their popup.
+  - A few HPD area names that OpenStreetMap misreads (`Airport`, `Moanalua V`, `Sunset`) are mapped to clearer names in `geo.js`.
   - A scheduled GitHub Action ([.github/workflows/geocode.yml](.github/workflows/geocode.yml)) runs [scripts/geocode.mjs](scripts/geocode.mjs) every 5 minutes. It looks up any new addresses in the feed, keeps only the current ones, and commits `geocodes.json` when it changes, which republishes the site.
   - The page loads `geocodes.json` first, so visitors normally make no geocoding requests. Scheduled runs are often delayed, so the page itself looks up any incident newer than the file and caches the result in the browser's localStorage.
 - **Map:** [Leaflet](https://leafletjs.com/) with OpenStreetMap tiles. Pins are colour-coded by incident type. Incidents at the same location share one numbered marker whose popup lists them all.

@@ -9,30 +9,39 @@ export function normalize(addr) {
   return addr.replace(/^(\d{2})(\d{4})\b/, (_, a, b) => `${a}-${+b}`).replace(/\bKam Hwy\b/i, 'Kamehameha Hwy');
 }
 
-// Full address first, then the first street with no number, then the area; the fallbacks are approximate.
-function queries(r) {
-  const full = normalize(r.address || '');
-  const street = full.split('/')[0].replace(/^[\d-]+\s+/, '').trim();
-  return [[full, false], [street, true], [r.area, true]].filter(([q]) => q);
-}
+// HPD area names that Nominatim misreads on their own.
+const AREA_ALIASES = { 'Airport': 'Daniel K. Inouye International Airport', 'Moanalua V': 'Moanalua Valley',
+                       'Sunset': 'Sunset Beach' };
+const NEAR = 0.08; // degrees (~9 km): how far from the area's center an address may land
 
 let lastCall = 0;
-async function nominatim(q, headers) {
+async function search(q, box, headers) {
   const wait = lastCall + 1100 - Date.now(); // max 1 request/second per Nominatim policy
   if (wait > 0) await new Promise(r => setTimeout(r, wait));
   lastCall = Date.now();
-  const url = `https://nominatim.openstreetmap.org/search?format=json&limit=1&bounded=1&viewbox=${OAHU}&q=${encodeURIComponent(q)}`;
+  const url = `https://nominatim.openstreetmap.org/search?format=json&limit=1&bounded=1&viewbox=${box}&q=${encodeURIComponent(q)}`;
   const res = await fetch(url, { headers });
   if (!res.ok) throw new Error('geocoder HTTP ' + res.status);
   const [hit] = await res.json();
-  return hit ? [+hit.lat, +hit.lon] : null;
+  return hit && { ll: [+hit.lat, +hit.lon], road: hit.class === 'highway' };
 }
 
-// Returns { ll: [lat, lon], approx } or null if nothing matched. Throws on network/HTTP errors so they aren't cached.
+export const areas = new Map(); // area name -> center [lat, lon] or null
+export async function areaCenter(area, headers) {
+  if (!areas.has(area)) areas.set(area, (await search(AREA_ALIASES[area] || area, OAHU, headers))?.ll ?? null);
+  return areas.get(area);
+}
+
+// Looks up the address only near the incident's area, so a house number OSM doesn't know can't match the
+// same road in another town. Returns { ll: [lat, lon], approx } or null; throws on network/HTTP errors so they aren't cached.
 export async function geocode(r, headers) {
-  for (const [q, approx] of queries(r)) {
-    const ll = await nominatim(q, headers);
-    if (ll) return { ll, approx };
+  const c = r.area ? await areaCenter(r.area, headers) : null;
+  const box = c ? [c[1] - NEAR, c[0] + NEAR, c[1] + NEAR, c[0] - NEAR].map(n => +n.toFixed(4)).join() : OAHU;
+  const full = normalize(r.address || '');
+  const street = full.split('/')[0].replace(/^[\d-]+\s+/, '').trim(); // first street of an intersection, no number
+  for (const q of new Set([full, street].filter(Boolean))) {
+    const hit = await search(q, box, headers);
+    if (hit) return { ll: hit.ll, approx: hit.road || q !== full }; // a whole-road match only says "somewhere on this road"
   }
-  return null;
+  return c && { ll: c, approx: true };
 }
