@@ -26,7 +26,7 @@ Then open http://localhost:8765.
   - A few HPD area names that OpenStreetMap misreads (`Airport`, `Moanalua V`, `Sunset`) are mapped to clearer names in `geo.js`.
   - A scheduled GitHub Action ([.github/workflows/geocode.yml](.github/workflows/geocode.yml)) runs [scripts/geocode.mjs](scripts/geocode.mjs) every 5 minutes. It looks up any new addresses in the feed, keeps only the current ones, and commits `geocodes.json` when it changes, which republishes the site.
   - The page loads `geocodes.json` first, so visitors normally make no geocoding requests. Scheduled runs are often delayed, so the page itself looks up any incident newer than the file and caches the result in the browser's localStorage.
-- **Map:** [Leaflet](https://leafletjs.com/) with OpenStreetMap tiles. Pins are colour-coded by incident type, and the legend shows how many of each are in the feed; tick or untick a type in the legend to show or hide it (remembered in the browser across reloads). Incidents at the same location share one numbered marker whose popup lists them all.
+- **Map:** [Leaflet](https://leafletjs.com/) with OpenStreetMap tiles. Pins are colour-coded by incident type, and the legend shows how many of each are in the feed; tick or untick a type in the legend, or use the All/None buttons, to show or hide it (remembered in the browser across reloads). Incidents at the same location share one numbered marker whose popup lists them all.
 
 ## Limitations
 

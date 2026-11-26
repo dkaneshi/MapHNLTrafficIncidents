@@ -15,6 +15,8 @@
   #status { color: #444; margin-bottom: 6px; }
   .key { display: flex; align-items: center; gap: 6px; cursor: pointer; }
   .key input { margin: 0; }
+  .bulk { margin-bottom: 4px; color: #444; }
+  .bulk button { font: inherit; padding: 1px 8px; cursor: pointer; }
   .key .n { margin-left: auto; padding-left: 8px; color: #666; font-variant-numeric: tabular-nums; }
   .cluster { width: 26px; height: 26px; border-radius: 50%; background: #333; color: #fff; font-weight: 600;
              display: flex; align-items: center; justify-content: center; border: 2px solid #fff; box-shadow: 0 0 3px #000; }
@@ -24,7 +26,9 @@
 </head>
 <body>
 <div id="map" role="region" aria-label="Map of Oahu traffic incidents"></div>
-<div id="panel"><h1>Honolulu Traffic Incidents</h1><div id="status" aria-live="polite">Loading…</div><div id="legend"></div></div>
+<div id="panel"><h1>Honolulu Traffic Incidents</h1><div id="status" aria-live="polite">Loading…</div>
+  <div class="bulk">Show: <button type="button" data-show="true">All</button> <button type="button" data-show="false">None</button></div>
+  <div id="legend"></div></div>
 <script type="module">
 import { FEED, keyOf, geocode as lookup } from './geo.js';
 const REFRESH_MS = 5 * 60 * 1000; // feed updates about every 5 minutes
@@ -41,12 +45,17 @@ try { hidden = new Set(JSON.parse(localStorage.getItem('hidden') || '[]')); } ca
 const $legend = document.getElementById('legend');
 $legend.innerHTML = Object.entries(COLORS).map(([t, c]) =>
   `<label class="key"><input type="checkbox" value="${t}"${hidden.has(t) ? '' : ' checked'}><span class="dot" style="background:${c}"></span>${t}<span class="n"></span></label>`).join('');
-$legend.addEventListener('change', e => {
-  e.target.checked ? hidden.delete(e.target.value) : hidden.add(e.target.value);
+function applyFilter() {
+  hidden = new Set([...$legend.querySelectorAll('input:not(:checked)')].map(i => i.value));
   try { localStorage.setItem('hidden', JSON.stringify([...hidden])); } catch {}
   layer.clearLayers(); groups = {};
   placed.forEach(([r, g]) => addMarker(r, g));
-});
+}
+$legend.addEventListener('change', applyFilter);
+document.querySelectorAll('.bulk button').forEach(b => b.addEventListener('click', () => {
+  $legend.querySelectorAll('input').forEach(i => i.checked = b.dataset.show === 'true');
+  applyFilter();
+}));
 
 // Geocode cache: Nominatim's usage policy requires caching; localStorage just makes reloads fast.
 let cache = {};
