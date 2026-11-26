@@ -22,16 +22,22 @@ Then open http://localhost:8765.
 - **Locations:** the dataset has addresses but no coordinates, so each address is looked up with [OpenStreetMap Nominatim](https://nominatim.org/), limited to Oahu and to one request per second, as the service's usage policy requires.
   - Hawaii house numbers are rewritten before lookup (`590560 Pupukea Rd` → `59-560 Pupukea Rd`), and `Kam Hwy` becomes `Kamehameha Hwy`.
   - If the full address isn't found, the app tries the street alone, then the area name. Those pins are faded with a dashed outline and marked "Approximate location" in their popup.
-  - Found locations are cached in the browser's localStorage, so reloads are fast and each refresh only looks up new addresses. The first load takes a few minutes while every address is located.
+  - A scheduled GitHub Action ([.github/workflows/geocode.yml](.github/workflows/geocode.yml)) runs [scripts/geocode.mjs](scripts/geocode.mjs) every 5 minutes. It looks up any new addresses in the feed, keeps only the current ones, and commits `geocodes.json` when it changes, which republishes the site.
+  - The page loads `geocodes.json` first, so visitors normally make no geocoding requests. Scheduled runs are often delayed, so the page itself looks up any incident newer than the file and caches the result in the browser's localStorage.
 - **Map:** [Leaflet](https://leafletjs.com/) with OpenStreetMap tiles. Pins are colour-coded by incident type. Incidents at the same location share one numbered marker whose popup lists them all.
 
 ## Limitations
 
 - Addresses the geocoder can't place at all are left off the map and counted as "not found".
 - Freeway entries (e.g. `200 H1E FWY`) usually fall back to the area, so several of them can stack into one approximate marker.
-- If Nominatim changes its rules or rate limits, pins stop appearing even though the data still loads.
+- If Nominatim changes its rules or rate limits, new pins stop appearing even though the data still loads.
+- GitHub disables scheduled workflows in a public repo after 60 days without repository activity; re-enable it from the Actions tab if that happens.
 
 ## Files
 
-- `index.html` – the whole app.
+- `index.html` – the page.
+- `geo.js` – address cleanup and geocoding, shared by the page and the scheduled job.
+- `geocodes.json` – precomputed locations, written by the scheduled job.
+- `scripts/geocode.mjs` – the scheduled job; run `node scripts/geocode.mjs` to refresh it by hand.
+- `scripts/geo.test.mjs` – tests; run `node --test`.
 - `.claude/launch.json` – local preview server config for Claude Code.
