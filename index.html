@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Honolulu Traffic Incidents</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+  html, body { margin: 0; height: 100%; font: 14px system-ui, sans-serif; }
+  #map { position: absolute; inset: 0; }
+  #panel { position: absolute; top: 10px; right: 10px; z-index: 1000; background: #fff; padding: 8px 12px;
+           border-radius: 6px; box-shadow: 0 1px 4px #0004; max-width: 260px; }
+  #panel h1 { font-size: 15px; margin: 0 0 4px; }
+  #status { color: #444; margin-bottom: 6px; }
+  .key { display: flex; align-items: center; gap: 6px; }
+  .cluster { width: 26px; height: 26px; border-radius: 50%; background: #333; color: #fff; font-weight: 600;
+             display: flex; align-items: center; justify-content: center; border: 2px solid #fff; box-shadow: 0 0 3px #000; }
+  .cluster.approx { opacity: .6; border-style: dashed; }
+  .dot { width: 12px; height: 12px; border-radius: 50%; border: 1px solid #0006; }
+</style>
+</head>
+<body>
+<div id="map" role="region" aria-label="Map of Oahu traffic incidents"></div>
+<div id="panel"><h1>Honolulu Traffic Incidents</h1><div id="status" aria-live="polite">Loading…</div><div id="legend"></div></div>
+<script>
+const FEED = 'https://data.honolulu.gov/resource/ykb6-n5th.json?$limit=5000';
+const REFRESH_MS = 5 * 60 * 1000; // feed updates about every 5 minutes
+const OAHU = '-158.30,21.75,-157.60,21.25'; // Nominatim viewbox: left,top,right,bottom
+const COLORS = { 'MVC': '#d62728', 'MVC Veh Towed': '#8c1d1d', 'Traffic Incident': '#ff7f0e', 'Hazardous Driver': '#9467bd',
+                 'Stalled/Hazard Veh': '#e7ba00', 'Traffic Control Device': '#1f77b4', 'Traffic Complaint': '#2ca02c' };
+
+const map = L.map('map').setView([21.46, -157.98], 11);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19,
+  attribution: '&copy; OpenStreetMap contributors | Data: data.honolulu.gov' }).addTo(map);
+const layer = L.layerGroup().addTo(map);
+const $status = document.getElementById('status');
+document.getElementById('legend').innerHTML = Object.entries(COLORS).map(([t, c]) =>
+  `<div class="key"><span class="dot" style="background:${c}"></span>${t}</div>`).join('');
+
+// Geocode cache: Nominatim's usage policy requires caching; localStorage just makes reloads fast.
+let cache = {};
+try { cache = JSON.parse(localStorage.getItem('geo') || '{}'); } catch {}
+const saveCache = () => { try { localStorage.setItem('geo', JSON.stringify(cache)); } catch {} };
+
+// "590560 Pupukea Rd" -> "59-560 Pupukea Rd" (Hawaii hyphenated house numbers); "Kam Hwy" -> "Kamehameha Hwy".
+function normalize(addr) {
+  return addr.replace(/^(\d{2})(\d{4})\b/, (_, a, b) => `${a}-${+b}`).replace(/\bKam Hwy\b/i, 'Kamehameha Hwy');
+}
+function queries(r) {
+  const full = normalize(r.address || '');
+  const street = full.split('/')[0].replace(/^[\d-]+\s+/, '').trim(); // first street of an intersection, no number
+  return [[full, false], [street, true], [r.area, true]].filter(([q]) => q);
+}
+
+let lastCall = 0;
+async function nominatim(q) {
+  const wait = lastCall + 1100 - Date.now(); // max 1 request/second per Nominatim policy
+  if (wait > 0) await new Promise(r => setTimeout(r, wait));
+  lastCall = Date.now();
+  const url = `https://nominatim.openstreetmap.org/search?format=json&limit=1&bounded=1&viewbox=${OAHU}&q=${encodeURIComponent(q)}`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error('geocoder HTTP ' + res.status);
+  const [hit] = await res.json();
+  return hit ? [+hit.lat, +hit.lon] : null;
+}
+async function geocode(r) {
+  const key = (r.address || '') + '|' + (r.area || '');
+  if (key in cache) return cache[key];
+  let result = null;
+  for (const [q, approx] of queries(r)) {
+    const ll = await nominatim(q);
+    if (ll) { result = { ll, approx }; break; }
+  }
+  cache[key] = result; saveCache();
+  return result;
+}
+
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+const describe = r => `<b>${esc(r.type)}</b><br>${esc(r.date)} ${esc(r.time)}<br>${esc(r.address)}` +
+  (r.location ? `<br>${esc(r.location)}` : '') + `<br>${esc(r.area)}`;
+let groups = {}; // "lat,lon" -> { marker, rows }: incidents at the same spot share one marker
+function addMarker(r, g) {
+  const key = g.ll.join(), grp = groups[key] ??= { rows: [] };
+  grp.rows.push(r);
+  grp.marker?.remove();
+  const n = grp.rows.length;
+  grp.marker = n === 1
+    ? L.circleMarker(g.ll, { radius: 7, weight: 1, color: '#000', fillOpacity: g.approx ? 0.45 : 0.9,
+                             fillColor: COLORS[r.type] || '#777', dashArray: g.approx ? '2' : null })
+    : L.marker(g.ll, { title: `${n} incidents`, icon: L.divIcon({ className: '', iconSize: [26, 26],
+        html: `<div class="cluster${g.approx ? ' approx' : ''}">${n}</div>` }) });
+  grp.marker.bindPopup(grp.rows.map(describe).join('<hr>') +
+      (g.approx ? '<br><i>Approximate location (street/area only)</i>' : ''), { maxHeight: 300 })
+    .addTo(layer);
+}
+
+let run = 0;
+async function refresh() {
+  const id = ++run; // a newer refresh supersedes one still geocoding
+  let rows;
+  try {
+    const res = await fetch(FEED);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    rows = await res.json();
+  } catch (e) { $status.textContent = `Feed error: ${e.message}. Retrying in 5 min.`; return; }
+  layer.clearLayers(); groups = {};
+  const stamp = new Date().toLocaleTimeString();
+  let mapped = 0, missed = 0, done = 0;
+  const show = () => $status.textContent = `Updated ${stamp} · ${rows.length} incidents · ${mapped} mapped` +
+    (missed ? ` · ${missed} not found` : '') + (done < rows.length ? ` · locating ${rows.length - done}…` : '');
+  show();
+  for (const r of rows) {
+    if (id !== run) return;
+    let g = null;
+    try { g = await geocode(r); } catch (e) { console.warn(e); } // transient geocoder error: not cached, retried next refresh
+    if (id !== run) return;
+    g ? (addMarker(r, g), mapped++) : missed++;
+    done++; show();
+  }
+}
+refresh();
+setInterval(refresh, REFRESH_MS);
+</script>
+</body>
+</html>
