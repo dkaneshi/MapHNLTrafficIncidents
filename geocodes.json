@@ -1,4 +1,18 @@
 {
+ "1036 MAUNAKEA ST|Downtown": {
+  "ll": [
+   21.3120569,
+   -157.8633718
+  ],
+  "approx": false
+ },
+ "105 H1e Fwy|Pearl City": {
+  "ll": [
+   21.4001231,
+   -157.969428
+  ],
+  "approx": true
+ },
  "106 H1w Fwy|Pearl City": {
   "ll": [
    21.4001231,
@@ -27,6 +41,13 @@
   ],
   "approx": true
  },
+ "1177 Ward Ave|Honolulu": {
+  "ll": [
+   21.3035305,
+   -157.8494614
+  ],
+  "approx": false
+ },
  "1225 Rycroft St|Honolulu": {
   "ll": [
    21.29726,
@@ -34,10 +55,10 @@
   ],
   "approx": false
  },
- "1240 KUALA ST|Pearl City": {
+ "1247 KAILUA RD|Kailua": {
   "ll": [
-   21.4019047,
-   -157.9718287
+   21.3841361,
+   -157.752902
   ],
   "approx": false
  },
@@ -48,47 +69,12 @@
   ],
   "approx": false
  },
- "13 H1w Fwy|Makakilo": {
-  "ll": [
-   21.3469444,
-   -158.0858333
-  ],
-  "approx": true
- },
- "1302 QUEEN EMMA ST|Downtown": {
-  "ll": [
-   21.3116698,
-   -157.856685
-  ],
-  "approx": false
- },
- "1330 Pali Hwy|Downtown": {
-  "ll": [
-   21.3124995,
-   -157.8571512
-  ],
-  "approx": false
- },
  "135 S KAM HWY|Wahiawa": {
   "ll": [
    21.5256514,
    -158.0387441
   ],
   "approx": true
- },
- "1425 Liliha St|Downtown": {
-  "ll": [
-   21.3198085,
-   -157.8617312
-  ],
-  "approx": false
- },
- "1670 Makaloa St|Honolulu": {
-  "ll": [
-   21.2930417,
-   -157.8371282
-  ],
-  "approx": false
  },
  "169 H1w Fwy|Airport": {
   "ll": [
@@ -111,6 +97,13 @@
   ],
   "approx": true
  },
+ "2 H1e Fwy|Kapolei": {
+  "ll": [
+   21.344828,
+   -158.063333
+  ],
+  "approx": true
+ },
  "200 H1E FWY|Kalihi": {
   "ll": [
    21.3361131,
@@ -119,13 +112,6 @@
   "approx": true
  },
  "205 H1e Fwy|Kalihi": {
-  "ll": [
-   21.3361131,
-   -157.8716339
-  ],
-  "approx": true
- },
- "207 H1e Fwy|Kalihi": {
   "ll": [
    21.3361131,
    -157.8716339
@@ -160,17 +146,10 @@
   ],
   "approx": true
  },
- "215 H1E FWY|Downtown": {
+ "2215 N School St|Kalihi": {
   "ll": [
-   21.308945,
-   -157.8613412
-  ],
-  "approx": true
- },
- "219 KUULEI RD|Kailua": {
-  "ll": [
-   21.3959554,
-   -157.7410125
+   21.3403495,
+   -157.874106
   ],
   "approx": false
  },
@@ -181,10 +160,10 @@
   ],
   "approx": true
  },
- "23 H2n Fwy|Pearl City": {
+ "236 H1w Fwy|Makiki": {
   "ll": [
-   21.4001231,
-   -157.969428
+   21.3101652,
+   -157.8304463
   ],
   "approx": true
  },
@@ -202,6 +181,20 @@
   ],
   "approx": true
  },
+ "240 H1w Fwy|Manoa": {
+  "ll": [
+   21.3093848,
+   -157.8118169
+  ],
+  "approx": true
+ },
+ "2424 Kalakaua Ave|Waikiki": {
+  "ll": [
+   21.276067,
+   -157.8250901
+  ],
+  "approx": false
+ },
  "2446 Koa Ave|Waikiki": {
   "ll": [
    21.2757989,
@@ -209,28 +202,7 @@
   ],
   "approx": false
  },
- "25 Kaneohe Bay Dr|Kailua": {
-  "ll": [
-   21.422989,
-   -157.7484629
-  ],
-  "approx": false
- },
- "254 H1E FWY|Kapahulu": {
-  "ll": [
-   21.2792768,
-   -157.8128308
-  ],
-  "approx": true
- },
- "265 California Ave|Wahiawa": {
-  "ll": [
-   21.495057,
-   -158.031713
-  ],
-  "approx": false
- },
- "271 H1w Fwy|Kaimuki": {
+ "258 H1e Fwy|Kaimuki": {
   "ll": [
    21.27857,
    -157.802133
@@ -244,13 +216,6 @@
   ],
   "approx": false
  },
- "2825 Ala Ilima|Salt Lake": {
-  "ll": [
-   21.3469288,
-   -157.8999639
-  ],
-  "approx": false
- },
  "2847 Awaawaloa St|Mapunapuna": {
   "ll": [
    21.3378664,
@@ -258,19 +223,12 @@
   ],
   "approx": false
  },
- "2933 Kalakaua Ave|Waikiki": {
+ "3288 Moanalua Rd|Moanalua V": {
   "ll": [
-   21.2615687,
-   -157.8202859
+   21.3633504,
+   -157.899779
   ],
   "approx": false
- },
- "305 W Moanalua Fwy|Moanalua V": {
-  "ll": [
-   21.3738947,
-   -157.9267385
-  ],
-  "approx": true
  },
  "338 E Moanalua Fwy|Salt Lake": {
   "ll": [
@@ -279,26 +237,12 @@
   ],
   "approx": true
  },
- "362 S Kalaheo Ave|Kailua": {
+ "388 Kamakee St|Honolulu": {
   "ll": [
-   21.3966336,
-   -157.7288796
+   21.2946436,
+   -157.8524053
   ],
   "approx": false
- },
- "400 Farrington Hwy|Kapolei": {
-  "ll": [
-   21.333956,
-   -158.088811
-  ],
-  "approx": false
- },
- "4000 Likelike Hwy|Kalihi": {
-  "ll": [
-   21.3361131,
-   -157.8716339
-  ],
-  "approx": true
  },
  "410575 Kalanianaole Hwy|Waimanalo": {
   "ll": [
@@ -321,19 +265,19 @@
   ],
   "approx": false
  },
- "4380 Lawehana St|Aiea": {
-  "ll": [
-   21.3552279,
-   -157.9292726
-  ],
-  "approx": false
- },
  "4435 Salt Lake Blvd|Aiea": {
   "ll": [
    21.3614265,
    -157.9289071
   ],
   "approx": false
+ },
+ "450998 Likelike Hwy|Kaneohe": {
+  "ll": [
+   21.3772881,
+   -157.8149652
+  ],
+  "approx": true
  },
  "4600 Kapolei Pkwy|Kapolei": {
   "ll": [
@@ -356,47 +300,12 @@
   ],
   "approx": false
  },
- "510392 KAM HWY|Kaaawa": {
-  "ll": [
-   21.4815136,
-   -157.8449204
-  ],
-  "approx": true
- },
- "511 Manawai St|Kapolei": {
-  "ll": [
-   21.3266923,
-   -158.074805
-  ],
-  "approx": false
- },
- "52 H1E FWY|Ewa Beach": {
-  "ll": [
-   21.315603,
-   -158.008804
-  ],
-  "approx": true
- },
  "52 H2n Fwy|Mililani": {
   "ll": [
    21.4508308,
    -158.0095783
   ],
   "approx": true
- },
- "525 Alakawa St|Kalihi": {
-  "ll": [
-   21.3186319,
-   -157.8712427
-  ],
-  "approx": false
- },
- "550370 Kam Hwy|Laie": {
-  "ll": [
-   21.6390233,
-   -157.920265
-  ],
-  "approx": false
  },
  "550442 Kam Hwy|Laie": {
   "ll": [
@@ -419,6 +328,13 @@
   ],
   "approx": true
  },
+ "578 H3E FWY|Kaneohe": {
+  "ll": [
+   21.418555,
+   -157.804184
+  ],
+  "approx": true
+ },
  "58 H1w Fwy|Waipahu": {
   "ll": [
    21.3848275,
@@ -432,13 +348,6 @@
    -158.0467723
   ],
   "approx": true
- },
- "602 Kailua Rd|Kailua": {
-  "ll": [
-   21.3944307,
-   -157.7418798
-  ],
-  "approx": false
  },
  "603 Kalanianaole Hwy|Kailua": {
   "ll": [
@@ -454,13 +363,6 @@
   ],
   "approx": true
  },
- "614 Cooke St|Honolulu": {
-  "ll": [
-   21.2997978,
-   -157.8573841
-  ],
-  "approx": false
- },
  "633 Kapahulu Ave|Kaimuki": {
   "ll": [
    21.2792687,
@@ -472,13 +374,6 @@
   "ll": [
    21.324094,
    -157.8589402
-  ],
-  "approx": false
- },
- "641550 Kam Hwy|Wahiawa": {
-  "ll": [
-   21.5259081,
-   -158.0378039
   ],
   "approx": false
  },
@@ -495,20 +390,6 @@
    -157.8780387
   ],
   "approx": true
- },
- "670 Auahi St|Kakaako": {
-  "ll": [
-   21.2997412,
-   -157.860038
-  ],
-  "approx": false
- },
- "801 Kaheka St|Honolulu": {
-  "ll": [
-   21.2936002,
-   -157.8387031
-  ],
-  "approx": false
  },
  "801 S Beretania St|Honolulu": {
   "ll": [
@@ -531,17 +412,31 @@
   ],
   "approx": true
  },
+ "840930 Moua St|Makaha": {
+  "ll": [
+   21.4667227,
+   -158.2165381
+  ],
+  "approx": true
+ },
+ "841075 Farrington Hwy|Makaha": {
+  "ll": [
+   21.472879,
+   -158.210678
+  ],
+  "approx": true
+ },
+ "848 Ala Lilikoi St|Salt Lake": {
+  "ll": [
+   21.3456066,
+   -157.9136096
+  ],
+  "approx": false
+ },
  "870127 Kaukamana Rd|Maili": {
   "ll": [
    21.4235256,
    -158.1721406
-  ],
-  "approx": true
- },
- "910015 Farrington Hwy|Kapolei": {
-  "ll": [
-   21.3550747,
-   -158.0618067
   ],
   "approx": true
  },
@@ -559,13 +454,6 @@
   ],
   "approx": true
  },
- "910201 Fort Weaver Rd|Ewa Beach": {
-  "ll": [
-   21.3139194,
-   -157.9975196
-  ],
-  "approx": true
- },
  "910955 North Rd|Ewa Beach": {
   "ll": [
    21.3308937,
@@ -580,12 +468,12 @@
   ],
   "approx": true
  },
- "911561 Keaunui Dr|Ewa Beach": {
+ "920161 Waipahe Pl|Kapolei": {
   "ll": [
-   21.3393435,
-   -158.0201116
+   21.331212,
+   -158.1200781
   ],
-  "approx": false
+  "approx": true
  },
  "922 Kam Hwy|Pearl City": {
   "ll": [
@@ -593,6 +481,20 @@
    -157.9708449
   ],
   "approx": false
+ },
+ "93 H1e Fwy|Waipahu": {
+  "ll": [
+   21.3848275,
+   -158.0115976
+  ],
+  "approx": true
+ },
+ "94 H1w Fwy|Waipahu": {
+  "ll": [
+   21.3848275,
+   -158.0115976
+  ],
+  "approx": true
  },
  "940050 Farrington Hwy|Waipahu": {
   "ll": [
@@ -615,12 +517,26 @@
   ],
   "approx": false
  },
- "980150 Kaonohi St|Aiea": {
+ "941038 Lumiauau St|Waipio": {
   "ll": [
-   21.3847424,
-   -157.9451419
+   21.4032101,
+   -157.9930944
   ],
-  "approx": false
+  "approx": true
+ },
+ "950029 Kahoea St|Mililani": {
+  "ll": [
+   21.4494587,
+   -158.0212036
+  ],
+  "approx": true
+ },
+ "950835 Makaunulau St|Mililani": {
+  "ll": [
+   21.4591853,
+   -158.0036439
+  ],
+  "approx": true
  },
  "980360 Koauka Loop|Aiea": {
   "ll": [
@@ -636,24 +552,17 @@
   ],
   "approx": true
  },
+ "990581 Kam Hwy|JB Pearl": {
+  "ll": [
+   21.3681587,
+   -157.9359891
+  ],
+  "approx": true
+ },
  "Ainamakua Dr / Meheula Pkwy|Mililani": {
   "ll": [
    21.4683779,
    -158.0007425
-  ],
-  "approx": true
- },
- "Ala Wai Blvd / Kaiolu St|Waikiki": {
-  "ll": [
-   21.2737687,
-   -157.8169337
-  ],
-  "approx": true
- },
- "Ala Wai Blvd / Launiu St|Waikiki": {
-  "ll": [
-   21.2737687,
-   -157.8169337
   ],
   "approx": true
  },
@@ -664,24 +573,31 @@
   ],
   "approx": true
  },
- "Coral Sea Rd / Fd Roosevelt Ave|Kalaeloa": {
+ "Farrington Hwy / Aala Walk|Nanakuli": {
   "ll": [
-   21.3077867,
-   -158.0564452
+   21.3414899,
+   -158.1050767
   ],
   "approx": true
  },
- "Farrington Hwy / Fort Barrette Rd|Kapolei": {
+ "Farrington Hwy / Maipalaoa Rd|Maili": {
   "ll": [
-   21.3749278,
-   -158.0288671
+   21.4099816,
+   -158.1768175
   ],
   "approx": true
  },
- "Farrington Hwy / Kahualii St|Waipahu": {
+ "Farrington Hwy / Makakilo Dr|Kapolei": {
   "ll": [
-   21.3894978,
-   -157.9948712
+   21.3408828,
+   -158.0768309
+  ],
+  "approx": true
+ },
+ "Farrington Hwy / Moua St|Makaha": {
+  "ll": [
+   21.4664417,
+   -158.2142467
   ],
   "approx": true
  },
@@ -699,17 +615,24 @@
   ],
   "approx": true
  },
- "H1e Exit15 Hickam|Makalapa": {
+ "H1e Exit26a Koko Head|Kaimuki": {
   "ll": [
-   21.3520478,
-   -157.9353975
+   21.27857,
+   -157.802133
   ],
   "approx": true
  },
- "H1e Exit21b Punchbowl|Downtown": {
+ "H1e Wakea Off|Kapolei": {
   "ll": [
-   21.308945,
-   -157.8613412
+   21.344828,
+   -158.063333
+  ],
+  "approx": true
+ },
+ "H1w Campbell On|Kapolei": {
+  "ll": [
+   21.344828,
+   -158.063333
   ],
   "approx": true
  },
@@ -720,13 +643,6 @@
   ],
   "approx": true
  },
- "H1w Kaonohi Op|Aiea": {
-  "ll": [
-   21.3822222,
-   -157.9336111
-  ],
-  "approx": true
- },
  "H3E HOSPITAL ROCK|Kaneohe": {
   "ll": [
    21.4017016,
@@ -734,31 +650,10 @@
   ],
   "approx": true
  },
- "H3e W Harano Tunnel|Aiea": {
+ "Henokea St / Huakai St|Waipahu": {
   "ll": [
-   21.3822222,
-   -157.9336111
-  ],
-  "approx": true
- },
- "Halawa Valley St / Ulune St|Aiea": {
-  "ll": [
-   21.3727242,
-   -157.9172677
-  ],
-  "approx": true
- },
- "Halekauwila St / South St|Honolulu": {
-  "ll": [
-   21.3018925,
-   -157.859654
-  ],
-  "approx": true
- },
- "Honowai St / Kunia Rd|Waipahu": {
-  "ll": [
-   21.3857661,
-   -158.021357
+   21.3967538,
+   -158.0027051
   ],
   "approx": true
  },
@@ -766,13 +661,6 @@
   "ll": [
    21.3346098,
    -157.8611165
-  ],
-  "approx": true
- },
- "Ka Uka Onto H2s|Waipio": {
-  "ll": [
-   21.4172766,
-   -157.9986759
   ],
   "approx": true
  },
@@ -825,21 +713,14 @@
   ],
   "approx": true
  },
- "Kalanianaole Hwy / Kealahou St|Hawaii Kai": {
+ "Kalo Pl / Varsity Pl|Mccully": {
   "ll": [
-   21.2904115,
-   -157.6656589
+   21.2919256,
+   -157.8202156
   ],
   "approx": true
  },
- "KALANIANAOLE HWY / POALIMA ST|Waimanalo": {
-  "ll": [
-   21.347931,
-   -157.7220435
-  ],
-  "approx": true
- },
- "Kam Hwy / Acacia Rd|Pearl City": {
+ "KAM HWY / ACACIA RD|Pearl City": {
   "ll": [
    21.3956734,
    -157.9749471
@@ -850,6 +731,13 @@
   "ll": [
    21.3970501,
    -157.9792376
+  ],
+  "approx": true
+ },
+ "Kam Hwy / Likelike Hwy|Kaneohe": {
+  "ll": [
+   21.3912469,
+   -157.7959732
   ],
   "approx": true
  },
@@ -867,13 +755,6 @@
   ],
   "approx": true
  },
- "Kam Hwy / Plantation Rd|Wahiawa": {
-  "ll": [
-   21.4539365,
-   -158.0161896
-  ],
-  "approx": true
- },
  "Kam Hwy / Puu Poni St|Pearl City": {
   "ll": [
    21.392137,
@@ -888,10 +769,10 @@
   ],
   "approx": true
  },
- "Kanapuu Dr / Keolu Dr|Waimanalo": {
+ "Kamaaha Ave / Kealanani Ave|Kapolei": {
   "ll": [
-   21.3705329,
-   -157.7356829
+   21.3363708,
+   -158.0643924
   ],
   "approx": true
  },
@@ -909,10 +790,24 @@
   ],
   "approx": true
  },
+ "Laau St / Date St|Mccully": {
+  "ll": [
+   21.2850979,
+   -157.820912
+  ],
+  "approx": true
+ },
  "Liliha St / N King St|Kalihi": {
   "ll": [
    21.3185974,
    -157.8637205
+  ],
+  "approx": true
+ },
+ "Makamua St / Hoomoana St|Pearl City": {
+  "ll": [
+   21.4057878,
+   -157.9655956
   ],
   "approx": true
  },
@@ -930,24 +825,10 @@
   ],
   "approx": true
  },
- "Moanalua Rd / Hekaha St|Aiea": {
+ "N Nimitz Hwy / Iwilei Rd|Kalihi": {
   "ll": [
-   21.3906517,
-   -157.9472307
-  ],
-  "approx": true
- },
- "Moanalua Rd / Hoomalu St|Pearl City": {
-  "ll": [
-   21.3762501,
-   -157.9299649
-  ],
-  "approx": true
- },
- "Moanalua Rd / Kaahele St|Pearl City": {
-  "ll": [
-   21.3908202,
-   -157.9490906
+   21.3206136,
+   -157.8780387
   ],
   "approx": true
  },
@@ -958,17 +839,17 @@
   ],
   "approx": true
  },
+ "N Vineyard Blvd / Aala St|Downtown": {
+  "ll": [
+   21.3174921,
+   -157.8598713
+  ],
+  "approx": true
+ },
  "NIMITZ FROM H1W|Airport": {
   "ll": [
    21.3211445,
    -157.9184436
-  ],
-  "approx": true
- },
- "Nuuanu Ave / N School St|Nuuanu": {
-  "ll": [
-   21.316658,
-   -157.8556106
   ],
   "approx": true
  },
@@ -986,24 +867,10 @@
   ],
   "approx": true
  },
- "Piikoi St / Lunalilo St|Makiki": {
+ "River St / N Nimitz Hwy|Downtown": {
   "ll": [
-   21.3037949,
-   -157.842057
-  ],
-  "approx": true
- },
- "Punchbowl St / S King St|Downtown": {
-  "ll": [
-   21.3048195,
-   -157.858731
-  ],
-  "approx": true
- },
- "S Beretania St / Punchbowl St|Downtown": {
-  "ll": [
-   21.3077609,
-   -157.8564415
+   21.3137884,
+   -157.8628549
   ],
   "approx": true
  },
@@ -1014,13 +881,6 @@
   ],
   "approx": true
  },
- "Salt Lake Blvd / Puuloa Rd|Salt Lake": {
-  "ll": [
-   21.3614357,
-   -157.927738
-  ],
-  "approx": true
- },
  "Waikalani Dr / Kam Hwy|Mililani": {
   "ll": [
    21.4625451,
@@ -1028,17 +888,24 @@
   ],
   "approx": true
  },
- "Wakea St / Kamaaha Ave|Kapolei": {
+ "Waiola St / Pumehana St|Mccully": {
   "ll": [
-   21.3324784,
-   -158.0809468
+   21.2940723,
+   -157.8327598
   ],
   "approx": true
  },
- "Whitmore Ave / Uakanikoo St|Wahiawa": {
+ "Waipahu St / Leowahine St|Waipahu": {
   "ll": [
-   21.5094358,
-   -158.027026
+   21.3830675,
+   -158.0212234
+  ],
+  "approx": true
+ },
+ "Wilder Ave / Punahou St|Manoa": {
+  "ll": [
+   21.3029538,
+   -157.8327978
   ],
   "approx": true
  }
